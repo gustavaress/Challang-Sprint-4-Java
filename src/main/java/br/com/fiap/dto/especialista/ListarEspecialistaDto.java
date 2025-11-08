@@ -1,17 +1,19 @@
 package br.com.fiap.dto.especialista;
 
+import java.time.LocalDate;
+
 public class ListarEspecialistaDto {
 
     private int codigo;
     private String nome;
     private String email;
     private String cpf;
-    private int idade;
+    private LocalDate dataNascimento;
     private String telefone1;
     private String crm;
     private String especialidade;
 
-    // getters/setters
+    // Getters e Setters
     public int getCodigo() {
         return codigo;
     }
@@ -44,12 +46,12 @@ public class ListarEspecialistaDto {
         this.cpf = cpf;
     }
 
-    public int getIdade() {
-        return idade;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getTelefone1() {

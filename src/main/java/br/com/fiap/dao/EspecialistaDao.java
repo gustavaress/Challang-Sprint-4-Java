@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class EspecialistaDao {
         String sql = """
                 INSERT INTO T_ESPECIALISTA
                 (ID_ESPECIALISTA, NM_ESPECIALISTA, EM_ESPECIALISTA, CPF_ESPECIALISTA, 
-                 IDD_ESPECIALISTA, TEL1_ESPECIALISTA, CRM_ESPECIALISTA, ESP_ESPECIALISTA)
+                 DTNASC_ESPECIALISTA, TEL1_ESPECIALISTA, CRM_ESPECIALISTA, ESP_ESPECIALISTA)
                 VALUES (SEQ_ESPECIALISTA.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
@@ -30,7 +31,7 @@ public class EspecialistaDao {
             ps.setString(1, especialista.getNome());
             ps.setString(2, especialista.getEmail());
             ps.setString(3, especialista.getCpf());
-            ps.setInt(4, especialista.getIdade());
+            ps.setDate(4, Date.valueOf(especialista.getDataNascimento()));
             ps.setString(5, especialista.getTelefone1());
             ps.setString(6, especialista.getCrm());
             ps.setString(7, especialista.getEspecialidade());
@@ -127,7 +128,7 @@ public class EspecialistaDao {
         String sql = """
                 UPDATE T_ESPECIALISTA
                 SET NM_ESPECIALISTA = ?, EM_ESPECIALISTA = ?, CPF_ESPECIALISTA = ?, 
-                    IDD_ESPECIALISTA = ?, TEL1_ESPECIALISTA = ?, CRM_ESPECIALISTA = ?, 
+                    DTNASC_ESPECIALISTA = ?, TEL1_ESPECIALISTA = ?, CRM_ESPECIALISTA = ?, 
                     ESP_ESPECIALISTA = ?
                 WHERE ID_ESPECIALISTA = ?
                 """;
@@ -138,7 +139,7 @@ public class EspecialistaDao {
             ps.setString(1, especialista.getNome());
             ps.setString(2, especialista.getEmail());
             ps.setString(3, especialista.getCpf());
-            ps.setInt(4, especialista.getIdade());
+            ps.setDate(4, Date.valueOf(especialista.getDataNascimento()));
             ps.setString(5, especialista.getTelefone1());
             ps.setString(6, especialista.getCrm());
             ps.setString(7, especialista.getEspecialidade());
@@ -170,7 +171,7 @@ public class EspecialistaDao {
                 rs.getString("NM_ESPECIALISTA"),
                 rs.getString("EM_ESPECIALISTA"),
                 rs.getString("CPF_ESPECIALISTA"),
-                rs.getInt("IDD_ESPECIALISTA"),
+                rs.getDate("DTNASC_ESPECIALISTA").toLocalDate(),
                 rs.getString("TEL1_ESPECIALISTA"),
                 rs.getString("CRM_ESPECIALISTA"),
                 rs.getString("ESP_ESPECIALISTA")

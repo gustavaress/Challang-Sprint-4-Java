@@ -1,5 +1,7 @@
 package br.com.fiap.model;
 
+import java.time.LocalDate;
+
 public class Especialista extends Pessoa {
 
     private String crm;
@@ -7,9 +9,9 @@ public class Especialista extends Pessoa {
 
     public Especialista() {}
 
-    public Especialista(int codigo, String nome, String email, String cpf, int idade, String telefone1,
-                        String crm, String especialidade) {
-        super(codigo, nome, email, cpf, idade, telefone1);
+    public Especialista(int codigo, String nome, String email, String cpf, LocalDate dataNascimento,
+                        String telefone1, String crm, String especialidade) {
+        super(codigo, nome, email, cpf, dataNascimento, telefone1);
         this.crm = crm;
         this.especialidade = especialidade;
     }

@@ -1,6 +1,7 @@
 package br.com.fiap.dto.especialista;
 
 import jakarta.validation.constraints.*;
+import java.time.LocalDate;
 
 public class AtualizarEspecialistaDto {
 
@@ -11,14 +12,15 @@ public class AtualizarEspecialistaDto {
     @Email(message = "O e-mail deve ser válido.")
     private String email;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{11}")
+    @NotBlank(message = "O CPF é obrigatório.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter exatamente 11 dígitos numéricos.")
     private String cpf;
 
-    private int idade;
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    private LocalDate dataNascimento;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{10,11}")
+    @NotBlank(message = "O telefone é obrigatório.")
+    @Pattern(regexp = "\\d{10,11}", message = "O telefone deve ter entre 10 e 11 dígitos numéricos.")
     private String telefone1;
 
     @NotBlank(message = "O CRM é obrigatório.")
@@ -27,59 +29,25 @@ public class AtualizarEspecialistaDto {
     @NotBlank(message = "A especialidade é obrigatória.")
     private String especialidade;
 
-    public String getNome() {
-        return nome;
-    }
+    // Getters e Setters
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-    public String getCpf() {
-        return cpf;
-    }
+    public String getTelefone1() { return telefone1; }
+    public void setTelefone1(String telefone1) { this.telefone1 = telefone1; }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+    public String getCrm() { return crm; }
+    public void setCrm(String crm) { this.crm = crm; }
 
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
-    public String getTelefone1() {
-        return telefone1;
-    }
-
-    public void setTelefone1(String telefone1) {
-        this.telefone1 = telefone1;
-    }
-
-    public String getCrm() {
-        return crm;
-    }
-
-    public void setCrm(String crm) {
-        this.crm = crm;
-    }
-
-    public String getEspecialidade() {
-        return especialidade;
-    }
-
-    public void setEspecialidade(String especialidade) {
-        this.especialidade = especialidade;
-    }
+    public String getEspecialidade() { return especialidade; }
+    public void setEspecialidade(String especialidade) { this.especialidade = especialidade; }
 }

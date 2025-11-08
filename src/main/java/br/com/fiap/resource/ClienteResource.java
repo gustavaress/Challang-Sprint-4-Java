@@ -5,18 +5,14 @@ import br.com.fiap.dto.cliente.AtualizarClienteDto;
 import br.com.fiap.dto.cliente.ListarClienteDto;
 import br.com.fiap.exception.CampoJaCadastrado;
 import br.com.fiap.exception.EntidadeNaoEncontradaException;
-import br.com.fiap.model.Cliente;
 import br.com.fiap.service.ClienteService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.modelmapper.ModelMapper;
-
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/clientes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,17 +22,10 @@ public class ClienteResource {
     @Inject
     ClienteService clienteService;
 
-    @Inject
-    ModelMapper mapper;
-
     @GET
     public Response listarTodos() throws SQLException {
-        List<Cliente> lista = clienteService.listarClientes();
-        List<ListarClienteDto> dto = lista.stream()
-                .map(p -> mapper.map(p, ListarClienteDto.class))
-                .collect(Collectors.toList());
-
-        return Response.ok(dto).build();
+        List<ListarClienteDto> lista = clienteService.listarClientes();
+        return Response.ok(lista).build();
     }
 
     @GET
@@ -44,22 +33,39 @@ public class ClienteResource {
     public Response buscarPorId(@PathParam("id") int id)
             throws SQLException, EntidadeNaoEncontradaException {
 
-        Cliente cliente = clienteService.buscarPorId(id);
-        return Response.ok(mapper.map(cliente, ListarClienteDto.class)).build();
+        ListarClienteDto dto = new ListarClienteDto();
+        var cliente = clienteService.buscarPorId(id);
+
+        dto.setCodigo(cliente.getCodigo());
+        dto.setNome(cliente.getNome());
+        dto.setEmail(cliente.getEmail());
+        dto.setCpf(cliente.getCpf());
+        dto.setDataNascimento(cliente.getDataNascimento());
+        dto.setTelefone1(cliente.getTelefone1());
+        dto.setConvenio(cliente.getConvenio());
+        dto.setNumeroCarteirinha(cliente.getNumeroCarteirinha());
+
+        return Response.ok(dto).build();
     }
 
     @POST
     public Response inserir(@Valid CadastroClienteDto dto, @Context UriInfo uriInfo)
             throws SQLException, CampoJaCadastrado {
 
-        Cliente cliente = mapper.map(dto, Cliente.class);
-        clienteService.cadastrarCliente(cliente);
+        clienteService.cadastrarCliente(dto);
 
-        URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(cliente.getCodigo()))
-                .build();
+        // Recupera o novo cliente (opcional, se quiser devolver o objeto completo)
+        ListarClienteDto clienteCriado = new ListarClienteDto();
+        clienteCriado.setNome(dto.getNome());
+        clienteCriado.setEmail(dto.getEmail());
+        clienteCriado.setCpf(dto.getCpf());
+        clienteCriado.setDataNascimento(dto.getDataNascimento());
+        clienteCriado.setTelefone1(dto.getTelefone1());
+        clienteCriado.setConvenio(dto.getConvenio());
+        clienteCriado.setNumeroCarteirinha(dto.getNumeroCarteirinha());
 
-        return Response.created(uri).entity(mapper.map(cliente, ListarClienteDto.class)).build();
+        URI uri = uriInfo.getAbsolutePathBuilder().build();
+        return Response.created(uri).entity(clienteCriado).build();
     }
 
     @PUT
@@ -67,12 +73,8 @@ public class ClienteResource {
     public Response atualizar(@PathParam("id") int id, @Valid AtualizarClienteDto dto)
             throws SQLException, EntidadeNaoEncontradaException {
 
-        Cliente cliente = mapper.map(dto, Cliente.class);
-        cliente.setCodigo(id);
-
-        clienteService.atualizarCliente(cliente);
-
-        return Response.ok(mapper.map(cliente, ListarClienteDto.class)).build();
+        clienteService.atualizarCliente(id, dto);
+        return Response.ok(dto).build();
     }
 
     @DELETE

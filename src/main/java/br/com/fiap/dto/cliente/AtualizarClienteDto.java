@@ -1,6 +1,7 @@
 package br.com.fiap.dto.cliente;
 
 import jakarta.validation.constraints.*;
+import java.time.LocalDate;
 
 public class AtualizarClienteDto {
 
@@ -19,9 +20,9 @@ public class AtualizarClienteDto {
     )
     private String cpf;
 
-    @Min(value = 1, message = "A idade mínima permitida é 1.")
-    @Max(value = 120, message = "A idade máxima permitida é 120.")
-    private int idade;
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    @Past(message = "A data de nascimento deve ser anterior à data atual.")
+    private LocalDate dataNascimento;
 
     @NotBlank(message = "O telefone é obrigatório.")
     @Pattern(
@@ -30,7 +31,11 @@ public class AtualizarClienteDto {
     )
     private String telefone1;
 
-    // getters e setters
+    private String convenio;
+
+    private String numeroCarteirinha;
+
+    // Getters e Setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -40,9 +45,15 @@ public class AtualizarClienteDto {
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }
 
-    public int getIdade() { return idade; }
-    public void setIdade(int idade) { this.idade = idade; }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
     public String getTelefone1() { return telefone1; }
     public void setTelefone1(String telefone1) { this.telefone1 = telefone1; }
+
+    public String getConvenio() { return convenio; }
+    public void setConvenio(String convenio) { this.convenio = convenio; }
+
+    public String getNumeroCarteirinha() { return numeroCarteirinha; }
+    public void setNumeroCarteirinha(String numeroCarteirinha) { this.numeroCarteirinha = numeroCarteirinha; }
 }

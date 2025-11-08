@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +17,15 @@ public class ClienteDao {
     @Inject
     DataSource dataSource;
 
+    // =========================
+    // INSERIR CLIENTE
+    // =========================
     public void inserir(Cliente cliente) throws SQLException {
         String sql = """
                 INSERT INTO T_CLIENTE
-                (ID_CLIENTE, NM_CLIENTE, EM_CLIENTE, CPF_CLIENTE, IDD_CLIENTE, TEL1_CLIENTE)
-                VALUES (SEQ_CLIENTE.NEXTVAL, ?, ?, ?, ?, ?)
+                (ID_CLIENTE, NM_CLIENTE, EM_CLIENTE, CPF_CLIENTE, DTNASC_CLIENTE, 
+                 TEL1_CLIENTE, CONV_CLIENTE, NUM_CARTERINHA)
+                VALUES (SEQ_CLIENTE.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
         try (Connection conn = dataSource.getConnection();
@@ -29,8 +34,10 @@ public class ClienteDao {
             ps.setString(1, cliente.getNome());
             ps.setString(2, cliente.getEmail());
             ps.setString(3, cliente.getCpf());
-            ps.setInt(4, cliente.getIdade());
+            ps.setDate(4, Date.valueOf(cliente.getDataNascimento()));
             ps.setString(5, cliente.getTelefone1());
+            ps.setString(6, cliente.getConvenio());
+            ps.setString(7, cliente.getNumeroCarteirinha());
 
             ps.executeUpdate();
 
@@ -42,6 +49,9 @@ public class ClienteDao {
         }
     }
 
+    // =========================
+    // LISTAR TODOS OS CLIENTES
+    // =========================
     public List<Cliente> listar() throws SQLException {
         String sql = "SELECT * FROM T_CLIENTE";
         List<Cliente> clientes = new ArrayList<>();
@@ -57,6 +67,9 @@ public class ClienteDao {
         return clientes;
     }
 
+    // =========================
+    // BUSCAR POR ID
+    // =========================
     public Cliente buscarPorId(int id) throws SQLException, EntidadeNaoEncontradaException {
         String sql = "SELECT * FROM T_CLIENTE WHERE ID_CLIENTE = ?";
 
@@ -73,6 +86,9 @@ public class ClienteDao {
         }
     }
 
+    // =========================
+    // BUSCAR POR EMAIL
+    // =========================
     public Cliente buscarPorEmail(String email) throws SQLException, EntidadeNaoEncontradaException {
         String sql = "SELECT * FROM T_CLIENTE WHERE EM_CLIENTE = ?";
 
@@ -89,6 +105,9 @@ public class ClienteDao {
         }
     }
 
+    // =========================
+    // BUSCAR POR CPF
+    // =========================
     public Cliente buscarPorCpf(String cpf) throws SQLException, EntidadeNaoEncontradaException {
         String sql = "SELECT * FROM T_CLIENTE WHERE CPF_CLIENTE = ?";
 
@@ -105,10 +124,14 @@ public class ClienteDao {
         }
     }
 
+    // =========================
+    // ATUALIZAR CLIENTE
+    // =========================
     public void atualizar(Cliente cliente) throws SQLException, EntidadeNaoEncontradaException {
         String sql = """
                 UPDATE T_CLIENTE
-                SET NM_CLIENTE = ?, EM_CLIENTE = ?, CPF_CLIENTE = ?, IDD_CLIENTE = ?, TEL1_CLIENTE = ?
+                SET NM_CLIENTE = ?, EM_CLIENTE = ?, CPF_CLIENTE = ?, DTNASC_CLIENTE = ?, 
+                    TEL1_CLIENTE = ?, CONV_CLIENTE = ?, NUM_CARTERINHA = ?
                 WHERE ID_CLIENTE = ?
                 """;
 
@@ -118,9 +141,11 @@ public class ClienteDao {
             ps.setString(1, cliente.getNome());
             ps.setString(2, cliente.getEmail());
             ps.setString(3, cliente.getCpf());
-            ps.setInt(4, cliente.getIdade());
+            ps.setDate(4, Date.valueOf(cliente.getDataNascimento()));
             ps.setString(5, cliente.getTelefone1());
-            ps.setInt(6, cliente.getCodigo());
+            ps.setString(6, cliente.getConvenio());
+            ps.setString(7, cliente.getNumeroCarteirinha());
+            ps.setInt(8, cliente.getCodigo());
 
             if (ps.executeUpdate() == 0) {
                 throw new EntidadeNaoEncontradaException("Cliente não encontrado para atualizar!");
@@ -128,6 +153,9 @@ public class ClienteDao {
         }
     }
 
+    // =========================
+    // DELETAR CLIENTE
+    // =========================
     public void deletar(int id) throws SQLException, EntidadeNaoEncontradaException {
         String sql = "DELETE FROM T_CLIENTE WHERE ID_CLIENTE = ?";
 
@@ -142,14 +170,25 @@ public class ClienteDao {
         }
     }
 
+    // =========================
+    // CONVERSOR RESULTSET → CLIENTE
+    // =========================
     private Cliente parseCliente(ResultSet rs) throws SQLException {
-        return new Cliente(
-                rs.getInt("ID_CLIENTE"),
-                rs.getString("NM_CLIENTE"),
-                rs.getString("EM_CLIENTE"),
-                rs.getString("CPF_CLIENTE"),
-                rs.getInt("IDD_CLIENTE"),
-                rs.getString("TEL1_CLIENTE")
-        );
+        Cliente cliente = new Cliente();
+        cliente.setCodigo(rs.getInt("ID_CLIENTE"));
+        cliente.setNome(rs.getString("NM_CLIENTE"));
+        cliente.setEmail(rs.getString("EM_CLIENTE"));
+        cliente.setCpf(rs.getString("CPF_CLIENTE"));
+
+        Date data = rs.getDate("DTNASC_CLIENTE");
+        if (data != null) {
+            cliente.setDataNascimento(data.toLocalDate());
+        }
+
+        cliente.setTelefone1(rs.getString("TEL1_CLIENTE"));
+        cliente.setConvenio(rs.getString("CONV_CLIENTE"));
+        cliente.setNumeroCarteirinha(rs.getString("NUM_CARTERINHA"));
+
+        return cliente;
     }
 }

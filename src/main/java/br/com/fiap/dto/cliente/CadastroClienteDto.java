@@ -1,6 +1,7 @@
 package br.com.fiap.dto.cliente;
 
 import jakarta.validation.constraints.*;
+import java.time.LocalDate;
 
 public class CadastroClienteDto {
 
@@ -19,9 +20,9 @@ public class CadastroClienteDto {
     )
     private String cpf;
 
-    @Min(value = 1, message = "A idade mínima permitida é 1.")
-    @Max(value = 120, message = "A idade máxima permitida é 120.")
-    private int idade;
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    @Past(message = "A data de nascimento deve ser anterior à data atual.")
+    private LocalDate dataNascimento;
 
     @NotBlank(message = "O telefone é obrigatório.")
     @Pattern(
@@ -30,45 +31,29 @@ public class CadastroClienteDto {
     )
     private String telefone1;
 
-    // Getters e setters
+    private String convenio;
 
-    public String getNome() {
-        return nome;
-    }
+    private String numeroCarteirinha;
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    // Getters e Setters
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
 
-    public String getCpf() {
-        return cpf;
-    }
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+    public String getTelefone1() { return telefone1; }
+    public void setTelefone1(String telefone1) { this.telefone1 = telefone1; }
 
-    public int getIdade() {
-        return idade;
-    }
+    public String getConvenio() { return convenio; }
+    public void setConvenio(String convenio) { this.convenio = convenio; }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
-    public String getTelefone1() {
-        return telefone1;
-    }
-
-    public void setTelefone1(String telefone1) {
-        this.telefone1 = telefone1;
-    }
+    public String getNumeroCarteirinha() { return numeroCarteirinha; }
+    public void setNumeroCarteirinha(String numeroCarteirinha) { this.numeroCarteirinha = numeroCarteirinha; }
 }

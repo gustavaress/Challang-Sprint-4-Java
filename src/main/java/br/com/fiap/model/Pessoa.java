@@ -1,22 +1,24 @@
 package br.com.fiap.model;
 
+import java.time.LocalDate;
+
 public abstract class Pessoa {
 
     private int codigo;
     private String nome;
     private String email;
     private String cpf;
-    private int idade;
+    private LocalDate dataNascimento;
     private String telefone1;
 
     public Pessoa() {}
 
-    public Pessoa(int codigo, String nome, String email, String cpf, int idade, String telefone1) {
+    public Pessoa(int codigo, String nome, String email, String cpf, LocalDate dataNascimento, String telefone1) {
         this.codigo = codigo;
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
-        this.idade = idade;
+        this.dataNascimento = dataNascimento;
         this.telefone1 = telefone1;
     }
 
@@ -52,12 +54,12 @@ public abstract class Pessoa {
         this.cpf = cpf;
     }
 
-    public int getIdade() {
-        return idade;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getTelefone1() {
@@ -74,7 +76,7 @@ public abstract class Pessoa {
                 "\nNome: " + nome +
                 "\nEmail: " + email +
                 "\nCPF: " + cpf +
-                "\nIdade: " + idade +
+                "\nData de Nascimento: " + dataNascimento +
                 "\nTelefone: " + telefone1;
     }
 }

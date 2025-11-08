@@ -1,6 +1,7 @@
 package br.com.fiap.dto.especialista;
 
 import jakarta.validation.constraints.*;
+import java.time.LocalDate;
 
 public class CadastroEspecialistaDto {
 
@@ -11,14 +12,15 @@ public class CadastroEspecialistaDto {
     @Email(message = "O e-mail deve ser válido.")
     private String email;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{11}")
+    @NotBlank(message = "O CPF é obrigatório.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter exatamente 11 dígitos numéricos.")
     private String cpf;
 
-    private int idade;
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    private LocalDate dataNascimento;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{10,11}")
+    @NotBlank(message = "O telefone é obrigatório.")
+    @Pattern(regexp = "\\d{10,11}", message = "O telefone deve ter entre 10 e 11 dígitos numéricos.")
     private String telefone1;
 
     @NotBlank(message = "O CRM é obrigatório.")
@@ -27,6 +29,7 @@ public class CadastroEspecialistaDto {
     @NotBlank(message = "A especialidade é obrigatória.")
     private String especialidade;
 
+    // Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -51,12 +54,12 @@ public class CadastroEspecialistaDto {
         this.cpf = cpf;
     }
 
-    public int getIdade() {
-        return idade;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getTelefone1() {
